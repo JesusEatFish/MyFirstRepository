@@ -55,7 +55,7 @@ void loop() {
   if (buttonState == HIGH && ButtonPressed == false) {
   ledcolor = ledcolor + 1;
   ButtonPressed = true;  // mark it pressed
-  delay(200); // debounce (防彈跳)
+ 
 }
 
 if (buttonState == LOW) {
