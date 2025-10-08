@@ -28,9 +28,12 @@ const int GledPin = 4; // G
 const int BledPin = 5; // B
 
 int buttonState = 0;
+int ledState = LOW;
 int ledcolor = 0;
 bool ButtonPressed = false;
 String currentcolor ="led";
+unsigned long previousMillis = 0;
+const long interval = 1000;
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -38,7 +41,8 @@ void setup() {
   pinMode(RledPin, OUTPUT);
   pinMode(GledPin, OUTPUT);
   pinMode(BledPin, OUTPUT);
-  pinMode(buttonPin, INPUT);
+  pinMode(buttonPin, INPUT_PULLUP);
+  Serial.begin(9600);
 }
 
 // the loop function runs over and over again forever
@@ -48,14 +52,27 @@ void loop() {
   Serial.print("Current Color:");
   Serial.println(currentcolor);
 
-  if(buttonState == HIGH && ButtonPressed){
-    ledcolor = ledcolor + 1;
-    ButtonPressed = true;
+  if (buttonState == HIGH && ButtonPressed == false) {
+  ledcolor = ledcolor + 1;
+  ButtonPressed = true;  // mark it pressed
+  delay(200); // debounce (防彈跳)
+}
+
+if (buttonState == LOW) {
+  ButtonPressed = false; // release
+}
+
+
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= interval){
+    previousMillis = currentMillis;
+  if (ledState == LOW){
+      ledState = HIGH;
+   } else {
+    ledState = LOW;
+   }
   }
-  if(buttonState == LOW && ButtonPressed){
-    ledcolor = ledcolor + 1;
-    ButtonPressed = false;
-  }
+
   else if(ledcolor == 0){
     currentcolor = "LED off";
     digitalWrite(RledPin, HIGH);
@@ -66,51 +83,93 @@ void loop() {
   else if(ledcolor == 1){
     // RED
     currentcolor = "Red";
+    if(ledState == LOW){
     digitalWrite(RledPin, LOW);
     digitalWrite(GledPin, HIGH);
     digitalWrite(BledPin, HIGH);
+    } else {
+    digitalWrite(RledPin, HIGH);
+    digitalWrite(GledPin, HIGH);
+    digitalWrite(BledPin, HIGH);
+    }  
   }
   else if(ledcolor == 2){
     // GREEN
     currentcolor = "Green";
+    if(ledState == LOW){
     digitalWrite(RledPin, HIGH);
     digitalWrite(GledPin, LOW);
     digitalWrite(BledPin, HIGH);
+    } else {
+    digitalWrite(RledPin, HIGH);
+    digitalWrite(GledPin, HIGH);
+    digitalWrite(BledPin, HIGH);
+    }  
   }
   else if(ledcolor == 3){
     // BLUE
     currentcolor = "Blue";
+    if(ledState == LOW){
     digitalWrite(RledPin, HIGH);
     digitalWrite(GledPin, HIGH);
     digitalWrite(BledPin, LOW);
+    } else {
+    digitalWrite(RledPin, HIGH);
+    digitalWrite(GledPin, HIGH);
+    digitalWrite(BledPin, HIGH);
+    }  
   }
   else if(ledcolor == 4){
     // YELLOW
     currentcolor = "Yellow";
+    if(ledState == LOW){
     digitalWrite(RledPin, LOW);
     digitalWrite(GledPin, LOW);
     digitalWrite(BledPin, HIGH);
+    } else {
+    digitalWrite(RledPin, HIGH);
+    digitalWrite(GledPin, HIGH);
+    digitalWrite(BledPin, HIGH);
+    }  
   }
   else if(ledcolor == 5){
     // PURPLE
     currentcolor = "Purple";
+    if(ledState == LOW){
     digitalWrite(RledPin, LOW);
     digitalWrite(GledPin, HIGH);
     digitalWrite(BledPin, LOW);
+    } else {
+    digitalWrite(RledPin, HIGH);
+    digitalWrite(GledPin, HIGH);
+    digitalWrite(BledPin, HIGH);
+    }  
   }
   else if(ledcolor == 6){
     // CYAN
     currentcolor = "Cyan";
+    if(ledState == LOW){
     digitalWrite(RledPin, HIGH);
     digitalWrite(GledPin, LOW);
     digitalWrite(BledPin, LOW);
+    } else {
+    digitalWrite(RledPin, HIGH);
+    digitalWrite(GledPin, HIGH);
+    digitalWrite(BledPin, HIGH);
+    }  
   }
   else if(ledcolor == 7){
     // WHITE
     currentcolor = "White";
+    if(ledState == LOW){
     digitalWrite(RledPin, LOW);
     digitalWrite(GledPin, LOW);
     digitalWrite(BledPin, LOW);
+    } else {
+    digitalWrite(RledPin, HIGH);
+    digitalWrite(GledPin, HIGH);
+    digitalWrite(BledPin, HIGH);
+    }  
   }
   else if(ledcolor == 8){
     ledcolor = 0;
